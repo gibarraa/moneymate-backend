@@ -21,6 +21,11 @@ app.get("/api/health", (req, res) => {
 	});
 });
 
+// Root route: redirect browser root requests to the JSON health endpoint
+app.get("/", (_req, res) => {
+    res.redirect("/api/health");
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/accounts", accountRoutes);
 app.use("/api/transactions", transactionRoutes);
