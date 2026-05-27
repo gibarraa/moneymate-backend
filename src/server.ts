@@ -1,16 +1,13 @@
-import { app } from "./app.js";
-import { connectMongo } from "./config/mongo.js";
-import { env, validateServerEnv } from "./config/env.js";
+import { app } from "./app";
+import { env } from "./config/env";
+import { connectMongo } from "./config/mongo";
 
-async function startServer(): Promise<void> {
-  validateServerEnv();
-  await connectMongo();
-  app.listen(env.port, () => {
-    console.info(`Moneymate API escuchando en puerto ${env.port}`);
-  });
-}
+const startServer = async () => {
+	await connectMongo();
 
-void startServer().catch((error: unknown) => {
-  console.error("No fue posible iniciar el servidor", error);
-  process.exitCode = 1;
-});
+	app.listen(env.port, () => {
+		console.log(`Moneymate API running on port ${env.port}`);
+	});
+};
+
+startServer();

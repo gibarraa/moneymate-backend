@@ -1,15 +1,16 @@
 import mongoose from "mongoose";
-import { env } from "./env.js";
+import { env } from "./env";
 
-export async function connectMongo(): Promise<void> {
-  if (!env.mongoUri) {
-    throw new Error("MONGO_URI no esta configurada");
-  }
+export const connectMongo = async () => {
+	try {
+		if (!env.mongoUri) {
+			console.log("MongoDB URI no configurada. Se omitió conexión a MongoDB.");
+			return;
+		}
 
-  await mongoose.connect(env.mongoUri);
-  console.info("MongoDB conectado");
-}
-
-export async function disconnectMongo(): Promise<void> {
-  await mongoose.disconnect();
-}
+		await mongoose.connect(env.mongoUri);
+		console.log("MongoDB conectado correctamente");
+	} catch (error) {
+		console.error("Error al conectar MongoDB:", error);
+	}
+};

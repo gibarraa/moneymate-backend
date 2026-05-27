@@ -1,6 +1,4 @@
 node_modules/
 dist/
 .env
-.DS_Store
-coverage/
-npm-debug.log*
+/src/generated/prisma

@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum TransactionType {
+  income
+  expense
+}
+
+enum AccountType {
+  cash
+  debit
+  credit
+  savings
+}
+
+enum RecurringFrequency {
+  weekly
+  biweekly
+  monthly
+  yearly
+}
+
+model User {
+  id                String             @id @default(uuid())
+  name              String
+  email             String             @unique
+  password          String
+  accounts          Account[]
+  transactions      Transaction[]
+  budgets           Budget[]
+  savingsGoals      SavingsGoal[]
+  recurringPayments RecurringPayment[]
+  reports           Report[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@map("users")
+}
+
+model Account {
+  id           String        @id @default(uuid())
+  userId       String
+  name         String
+  type         AccountType
+  balance      Decimal       @default(0)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@map("accounts")
+}
+
+model Category {
+  id           String        @id @default(uuid())
+  name         String        @unique
+  type         TransactionType
+  icon         String?
+  color        String?
+  transactions Transaction[]
+  budgets      Budget[]
+
+  @@map("categories")
+}
+
+model Transaction {
+  id          String          @id @default(uuid())
+  userId      String
+  accountId   String
+  categoryId  String
+  amount      Decimal
+  type        TransactionType
+  description String
+  date        DateTime
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account     Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  category    Category        @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@map("transactions")
+}
+
+model Budget {
+  id          String   @id @default(uuid())
+  userId      String
+  categoryId  String
+  limitAmount Decimal
+  month       Int
+  year        Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category    Category @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("budgets")
+}
+
+model SavingsGoal {
+  id            String   @id @default(uuid())
+  userId        String
+  title         String
+  targetAmount  Decimal
+  currentAmount Decimal  @default(0)
+  deadline      DateTime
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("savings_goals")
+}
+
+model RecurringPayment {
+  id          String             @id @default(uuid())
+  userId      String
+  title       String
+  amount      Decimal
+  frequency   RecurringFrequency
+  nextPayment DateTime
+  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@map("recurring_payments")
+}
+
+model Report {
+  id           String   @id @default(uuid())
+  userId       String
+  month        Int
+  year         Int
+  totalIncome  Decimal
+  totalExpense Decimal
+  balance      Decimal
+  generatedAt  DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("reports")
+}
