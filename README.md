@@ -26,7 +26,7 @@ la rama de Persona 2 agregue PostgreSQL, Prisma, auth y CRUD principales.
 | Reglas automáticas y pruebas | Implementado |
 | README backend/frontend | Implementado |
 | MongoDB Atlas real | Requiere cuenta/credenciales del equipo |
-| Deploy frontend/backend | Requiere código integrado y cuentas Vercel/Render |
+| Deploy frontend/backend | Frontend publicado; backend pendiente de Render |
 | Usuario demo | Requiere auth y PostgreSQL de Persona 2 |
 
 ## Arquitectura
@@ -224,12 +224,12 @@ Backend en Render:
 
 Frontend en Vercel:
 
-1. Importar `moneymate-frontend` una vez que Persona 1 lo publique.
+1. Frontend publicado en <https://moneymate-frontend-lake.vercel.app/login>.
 2. Configurar `VITE_API_URL=https://URL_BACKEND/api`.
 3. Usar output directory `dist`.
 
 ## Links finales y acceso demo
 
-- Frontend publicado: `PENDIENTE`
+- Frontend publicado: <https://moneymate-frontend-lake.vercel.app/login>
 - Link de API backend: `PENDIENTE_DE_DEPLOY`
 - Usuario demo: `PENDIENTE` hasta integrar autenticación PostgreSQL
