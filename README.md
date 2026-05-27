@@ -25,8 +25,8 @@ la rama de Persona 2 agregue PostgreSQL, Prisma, auth y CRUD principales.
 | Generación de patrones de gasto | Implementado |
 | Reglas automáticas y pruebas | Implementado |
 | README backend/frontend | Implementado |
-| MongoDB Atlas real | Requiere cuenta/credenciales del equipo |
-| Deploy frontend/backend | Frontend publicado; backend pendiente de Render |
+| MongoDB Atlas real | Configurado por el equipo |
+| Deploy frontend/backend | Frontend en Vercel; API publicada en Railway |
 | Usuario demo | Requiere auth y PostgreSQL de Persona 2 |
 
 ## Arquitectura
@@ -211,25 +211,23 @@ npm test          # Probar reglas financieras
 npm start         # Ejecutar dist/server.js
 ```
 
-## Deploy pendiente de integración
+## Deploy
 
-Backend en Render:
+Backend publicado en Railway:
 
-1. Importar `moneymate-backend` o usar el archivo `render.yaml` incluido.
-2. Usar build command `npm install && npm run build && npx prisma generate`
-   una vez que Prisma esté integrado.
-3. Usar start command `npm start`.
-4. Agregar `DATABASE_URL`, `MONGO_URI`, `JWT_SECRET` y `PORT`.
-5. Verificar `https://URL_BACKEND/api/health`.
+1. API pública: <https://moneymate-backend-production.up.railway.app/>
+2. Health check verificado: <https://moneymate-backend-production.up.railway.app/api/health>
+3. Variables requeridas: `DATABASE_URL`, `MONGO_URI`, `JWT_SECRET` y `PORT`.
 
 Frontend en Vercel:
 
 1. Frontend publicado en <https://moneymate-frontend-lake.vercel.app/login>.
-2. Configurar `VITE_API_URL=https://URL_BACKEND/api`.
+2. Configurar `VITE_API_URL=https://moneymate-backend-production.up.railway.app/api`.
 3. Usar output directory `dist`.
 
 ## Links finales y acceso demo
 
 - Frontend publicado: <https://moneymate-frontend-lake.vercel.app/login>
-- Link de API backend: `PENDIENTE_DE_DEPLOY`
+- Link de API backend: <https://moneymate-backend-production.up.railway.app/>
+- Health check: <https://moneymate-backend-production.up.railway.app/api/health>
 - Usuario demo: `PENDIENTE` hasta integrar autenticación PostgreSQL
