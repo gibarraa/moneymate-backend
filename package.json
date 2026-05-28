@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "prestart": "npx prisma migrate deploy",
+    "prestart": "npx prisma migrate deploy || echo \"Prisma migrate deploy failed; starting API so health checks stay available\"",
     "start": "node dist/server.js",
     "postinstall": "npx prisma generate",
     "prisma:migrate": "prisma migrate dev",

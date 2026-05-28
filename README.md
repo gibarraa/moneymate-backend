@@ -66,14 +66,20 @@ npm run build
 npm start
 ```
 
-En produccion, `npm start` ejecuta automaticamente:
+En produccion, `npm start` intenta ejecutar:
 
 ```bash
 npx prisma migrate deploy
 node dist/server.js
 ```
 
-Esto crea/actualiza las tablas antes de levantar la API. Para cargar categorias iniciales:
+Si `DATABASE_URL` no es una URL PostgreSQL valida, la API puede levantar para health checks, pero los endpoints que usan Prisma fallaran hasta corregir la variable y ejecutar:
+
+```bash
+npx prisma migrate deploy
+```
+
+Para cargar categorias iniciales:
 
 ```bash
 npx prisma db seed
