@@ -8,6 +8,7 @@ import budgetRoutes from "./routes/budget.routes";
 import goalRoutes from "./routes/goal.routes";
 import dashboardRoutes from "./routes/dashboard.routes";
 import reportRoutes from "./routes/report.routes";
+import categoryRoutes from "./routes/category.routes";
 
 export const app = express();
 
@@ -28,6 +29,7 @@ app.get("/", (_req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/accounts", accountRoutes);
+app.use("/api/categories", categoryRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/budgets", budgetRoutes);
 app.use("/api/goals", goalRoutes);

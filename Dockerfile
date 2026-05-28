@@ -22,4 +22,4 @@ RUN npm run build
 
 EXPOSE 4000
 
-CMD ["sh", "-c", "npx prisma migrate deploy || echo 'Prisma migrate deploy failed; starting API so health checks stay available'; node dist/server.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node prisma/seed.js || echo 'Prisma migrate/seed failed; starting API so health checks stay available'; node dist/server.js"]

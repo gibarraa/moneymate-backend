@@ -4,7 +4,8 @@
   const urls = {
     health: `${baseUrl}/api/health`,
     register: `${baseUrl}/api/auth/register`,
-    login: `${baseUrl}/api/auth/login`
+    login: `${baseUrl}/api/auth/login`,
+    categories: `${baseUrl}/api/categories`
   };
 
   const fetch = globalThis.fetch || (await import('node-fetch')).default;
@@ -31,5 +32,12 @@
     console.log('status', r.status);
     console.log(await r.text());
   } catch(e){ console.error('LOGIN ERROR', e.message || e); }
+
+  try{
+    console.log('\n=== CATEGORIES ===');
+    let r = await fetch(urls.categories);
+    console.log('status', r.status);
+    console.log(await r.text());
+  } catch(e){ console.error('CATEGORIES ERROR', e.message || e); }
 
 })();

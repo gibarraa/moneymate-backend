@@ -5,16 +5,16 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "prestart": "npx prisma migrate deploy || echo \"Prisma migrate deploy failed; starting API so health checks stay available\"",
+    "prestart": "npx prisma migrate deploy && node prisma/seed.js || echo \"Prisma migrate/seed failed; starting API so health checks stay available\"",
     "start": "node dist/server.js",
     "postinstall": "npx prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
     "prisma:generate": "prisma generate",
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "node prisma/seed.js"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "node prisma/seed.js"
   },
   "keywords": [],
   "author": "",

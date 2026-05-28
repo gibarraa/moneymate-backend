@@ -93,6 +93,7 @@ npx prisma db seed
 - `GET /api/auth/me`
 - `GET /api/accounts`
 - `POST /api/accounts`
+- `GET /api/categories`
 - `GET /api/transactions`
 - `POST /api/transactions`
 - `DELETE /api/transactions/:id`
