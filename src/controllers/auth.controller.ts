@@ -54,6 +54,7 @@ export const register = async (req: Request, res: Response) => {
 			user,
 		});
 	} catch (error) {
+		console.error("REGISTER_ERROR", error);
 		return res.status(500).json({
 			message: "Error al registrar usuario",
 		});
@@ -99,6 +100,7 @@ export const login = async (req: Request, res: Response) => {
 			},
 		});
 	} catch (error) {
+		console.error("LOGIN_ERROR", error);
 		return res.status(500).json({
 			message: "Error al iniciar sesión",
 		});
@@ -127,6 +129,7 @@ export const me = async (req: AuthRequest, res: Response) => {
 
 		return res.json(user);
 	} catch (error) {
+		console.error("ME_ERROR", error);
 		return res.status(500).json({
 			message: "Error al obtener perfil",
 		});
