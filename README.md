@@ -1,14 +1,19 @@
 # Moneymate Backend
 
-Backend de MoneyMate, una aplicación web de gestión financiera personal que permite registrar ingresos, egresos, cuentas, presupuestos, metas de ahorro y reportes mensuales.
+API REST de Moneymate, una aplicacion web para gestionar ingresos, egresos, cuentas, presupuestos, metas de ahorro, reportes y analitica financiera.
 
-## Tecnologías utilizadas
+## Links
 
-- Node.js
-- Express
+- Repositorio backend: https://github.com/gibarraa/moneymate-backend.git
+- API publica actual: https://moneymate-backend-production.up.railway.app
+- Health check: https://moneymate-backend-production.up.railway.app/api/health
+
+## Stack
+
+- Node.js + Express
 - TypeScript
-- PostgreSQL
-- Prisma ORM
+- PostgreSQL + Prisma ORM
+- MongoDB + Mongoose
 - JWT
 - bcryptjs
 - dotenv
@@ -16,46 +21,11 @@ Backend de MoneyMate, una aplicación web de gestión financiera personal que pe
 
 ## Arquitectura
 
-El backend está construido como una API REST usando Express y TypeScript.
+El frontend consume esta API por HTTP. PostgreSQL guarda los datos relacionales principales del usuario y MongoDB guarda datos de soporte como logs, recomendaciones, notificaciones y patrones de gasto.
 
-La base de datos principal es PostgreSQL, administrada con Prisma ORM. Esta base almacena la información relacional del sistema, como usuarios, cuentas, categorías, transacciones, presupuestos, metas de ahorro, pagos recurrentes y reportes.
+## Base relacional PostgreSQL
 
-## Estructura de carpetas
-
-```txt
-src/
-├── config/
-│   ├── env.ts
-│   ├── prisma.ts
-│   └── mongo.ts
-├── controllers/
-│   ├── auth.controller.ts
-│   ├── account.controller.ts
-│   ├── transaction.controller.ts
-│   ├── budget.controller.ts
-│   ├── goal.controller.ts
-│   ├── dashboard.controller.ts
-│   └── report.controller.ts
-├── middleware/
-│   ├── auth.middleware.ts
-│   └── error.middleware.ts
-├── routes/
-│   ├── auth.routes.ts
-│   ├── account.routes.ts
-│   ├── transaction.routes.ts
-│   ├── budget.routes.ts
-│   ├── goal.routes.ts
-│   ├── dashboard.routes.ts
-│   └── report.routes.ts
-├── utils/
-│   └── generateToken.ts
-├── app.ts
-└── server.ts
-```
-
-## Base de datos relacional
-
-PostgreSQL contiene 8 tablas principales:
+Tablas:
 
 - users
 - accounts
@@ -66,13 +36,121 @@ PostgreSQL contiene 8 tablas principales:
 - recurring_payments
 - reports
 
-## Despliegue con Docker
+## Base no relacional MongoDB
 
-Si quieres correr la API en un contenedor:
+Colecciones:
 
-```bash
-docker build -t moneymate-backend .
-docker run -p 4000:4000 --env-file .env moneymate-backend
+- activity_logs
+- ai_recommendations
+- notifications
+- spending_patterns
+
+## Variables de entorno
+
+Crear un archivo `.env` local o configurar estas variables en produccion:
+
+```env
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
+MONGO_URI="mongodb+srv://USER:PASSWORD@CLUSTER/moneymate"
+JWT_SECRET="change_this_secret"
+PORT=4000
 ```
 
-La API expone por defecto el puerto `4000` y usa `npm start` en producción.
+`DATABASE_URL` debe ser PostgreSQL. Si apunta a SQLite o esta vacia, Prisma no podra aplicar migraciones ni usar los endpoints principales.
+
+## Comandos
+
+```bash
+npm install
+npm run build
+npm start
+```
+
+En produccion, `npm start` ejecuta automaticamente:
+
+```bash
+npx prisma migrate deploy
+npx prisma db seed
+node dist/server.js
+```
+
+Esto crea/actualiza las tablas y carga las categorias iniciales antes de levantar la API.
+
+## Endpoints principales
+
+- `GET /api/health`
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/auth/me`
+- `GET /api/accounts`
+- `POST /api/accounts`
+- `GET /api/transactions`
+- `POST /api/transactions`
+- `DELETE /api/transactions/:id`
+- `GET /api/budgets`
+- `POST /api/budgets`
+- `GET /api/goals`
+- `POST /api/goals`
+- `GET /api/dashboard`
+- `GET /api/reports`
+- `POST /api/reports`
+- `GET /api/recommendations`
+- `POST /api/recommendations/generate`
+- `GET /api/notifications`
+- `PATCH /api/notifications/:id/read`
+- `GET /api/activity-logs`
+- `GET /api/spending-patterns`
+
+Los endpoints protegidos requieren:
+
+```http
+Authorization: Bearer TOKEN
+```
+
+## Usuario demo
+
+Despues de desplegar y correr migraciones, crear un usuario desde:
+
+```http
+POST /api/auth/register
+```
+
+Body sugerido:
+
+```json
+{
+  "name": "Demo User",
+  "email": "demo@moneymate.com",
+  "password": "123456"
+}
+```
+
+## Deploy
+
+### Render
+
+- Runtime: Node
+- Build command: `npm install && npx prisma generate && npm run build`
+- Start command: `npm start`
+- Variables requeridas: `DATABASE_URL`, `MONGO_URI`, `JWT_SECRET`, `PORT`
+
+### Railway
+
+Usar el mismo flujo:
+
+- Build: `npm install && npx prisma generate && npm run build`
+- Start: `npm start`
+- Variables requeridas: `DATABASE_URL`, `MONGO_URI`, `JWT_SECRET`, `PORT`
+
+## Verificacion de produccion
+
+```bash
+npm run build
+node scripts/prod_tests.js
+```
+
+Para probar otra URL:
+
+```bash
+$env:API_URL="https://tu-api.com"; node scripts/prod_tests.js
+```
