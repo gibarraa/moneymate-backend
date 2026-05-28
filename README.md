@@ -70,11 +70,14 @@ En produccion, `npm start` ejecuta automaticamente:
 
 ```bash
 npx prisma migrate deploy
-npx prisma db seed
 node dist/server.js
 ```
 
-Esto crea/actualiza las tablas y carga las categorias iniciales antes de levantar la API.
+Esto crea/actualiza las tablas antes de levantar la API. Para cargar categorias iniciales:
+
+```bash
+npx prisma db seed
+```
 
 ## Endpoints principales
 
