@@ -7,25 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum TransactionType {
-  income
-  expense
-}
-
-enum AccountType {
-  cash
-  debit
-  credit
-  savings
-}
-
-enum RecurringFrequency {
-  weekly
-  biweekly
-  monthly
-  yearly
-}
-
 model User {
   id                String             @id @default(uuid())
   name              String
@@ -47,7 +28,7 @@ model Account {
   id           String        @id @default(uuid())
   userId       String
   name         String
-  type         AccountType
+  type         String
   balance      Decimal       @default(0)
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
@@ -60,7 +41,7 @@ model Account {
 model Category {
   id           String        @id @default(uuid())
   name         String        @unique
-  type         TransactionType
+  type         String
   icon         String?
   color        String?
   transactions Transaction[]
@@ -75,7 +56,7 @@ model Transaction {
   accountId   String
   categoryId  String
   amount      Decimal
-  type        TransactionType
+  type        String
   description String
   date        DateTime
   user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -121,7 +102,7 @@ model RecurringPayment {
   userId      String
   title       String
   amount      Decimal
-  frequency   RecurringFrequency
+  frequency   String
   nextPayment DateTime
   user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt   DateTime           @default(now())
