@@ -9,6 +9,11 @@ import goalRoutes from "./routes/goal.routes";
 import dashboardRoutes from "./routes/dashboard.routes";
 import reportRoutes from "./routes/report.routes";
 import categoryRoutes from "./routes/category.routes";
+import { activityLogRouter } from "./routes/activityLog.routes";
+import { notificationRouter } from "./routes/notification.routes";
+import { recommendationRouter } from "./routes/recommendation.routes";
+import { spendingPatternRouter } from "./routes/spendingPattern.routes";
+import { authMiddleware } from "./middleware/auth.middleware";
 
 export const app = express();
 
@@ -35,5 +40,9 @@ app.use("/api/budgets", budgetRoutes);
 app.use("/api/goals", goalRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/reports", reportRoutes);
+app.use("/api/recommendations", authMiddleware, recommendationRouter);
+app.use("/api/notifications", authMiddleware, notificationRouter);
+app.use("/api/activity-logs", authMiddleware, activityLogRouter);
+app.use("/api/spending-patterns", authMiddleware, spendingPatternRouter);
 
 app.use(errorMiddleware);
